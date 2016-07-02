@@ -54,7 +54,8 @@ names(user_locs) <- md5(names(user_locs))
 
 for(loc in user_locs) {
   if (!(loc %in% user_locs_geo_list$raw) && !(loc %in% blacklist)) {
-    geo <- NA
+    geo <- list()
+    geo$status <- "OK"
     while (is.na(geo) || geo$status == "OVER_QUERY_LIMIT") {
       if (geo$status == "OVER_QUERY_LIMIT") {
         print("OVER QUERY LIMIT - Pausing for 1 hour at:") 
