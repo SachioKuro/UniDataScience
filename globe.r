@@ -63,7 +63,7 @@ for(loc in user_locs) {
     } else {
       blacklist <- append(blacklist, loc)
     }
-  } else {
+  } else if(!(loc %in% blacklist)) {
     geoindex <- which(user_locs_geo_list$raw == loc)
     user_locs_geo_list[[1]] <- append(user_locs_geo_list[[1]], user_locs_geo_list[[1]][[geoindex]])
     user_locs_geo_list[[2]] <- append(user_locs_geo_list[[2]], user_locs_geo_list[[2]][[geoindex]])
