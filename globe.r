@@ -54,17 +54,7 @@ names(user_locs) <- md5(names(user_locs))
 
 for(loc in user_locs) {
   if (!(loc %in% user_locs_geo_list$raw) && !(loc %in% blacklist)) {
-    #geo <- list()
-    #geo$status <- "OK"
-    #while (is.na(geo) || geo$status == "OVER_QUERY_LIMIT") {
-    #  if (geo$status == "OVER_QUERY_LIMIT") {
-    #    print("OVER QUERY LIMIT - Pausing for 1 hour at:") 
-    #    print(as.Character(Sys.time()))
-    #    Sys.sleep(60*60)
-    #  }
-        
-      geo <- as.list(geocode(loc, output = "latlona", source = "google"))
-    #}
+    geo <- as.list(geocode(loc, output = "latlona", source = "google"))
     if (!is.na(geo$lon) && !is.na(geo$lat)) {
       user_locs_geo_list$lon <- append(user_locs_geo_list$lon, geo$lon)
       user_locs_geo_list$lat <- append(user_locs_geo_list$lat, geo$lat)
@@ -73,6 +63,12 @@ for(loc in user_locs) {
     } else {
       blacklist <- append(blacklist, loc)
     }
+  } else {
+    geoindex <- which(user_locs_geo_list$raw == loc)
+    user_locs_geo_list[[1]] <- append(user_locs_geo_list[[1]], user_locs_geo_list[[1]][[geoindex]])
+    user_locs_geo_list[[2]] <- append(user_locs_geo_list[[2]], user_locs_geo_list[[2]][[geoindex]])
+    user_locs_geo_list[[3]] <- append(user_locs_geo_list[[3]], user_locs_geo_list[[3]][[geoindex]])
+    user_locs_geo_list[[4]] <- append(user_locs_geo_list[[4]], user_locs_geo_list[[4]][[geoindex]])
   }
 }
 
