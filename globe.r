@@ -54,17 +54,17 @@ names(user_locs) <- md5(names(user_locs))
 
 for(loc in user_locs) {
   if (!(loc %in% user_locs_geo_list$raw) && !(loc %in% blacklist)) {
-    geo <- list()
-    geo$status <- "OK"
-    while (is.na(geo) || geo$status == "OVER_QUERY_LIMIT") {
-      if (geo$status == "OVER_QUERY_LIMIT") {
-        print("OVER QUERY LIMIT - Pausing for 1 hour at:") 
-        print(as.Character(Sys.time()))
-        Sys.sleep(60*60)
-      }
+    #geo <- list()
+    #geo$status <- "OK"
+    #while (is.na(geo) || geo$status == "OVER_QUERY_LIMIT") {
+    #  if (geo$status == "OVER_QUERY_LIMIT") {
+    #    print("OVER QUERY LIMIT - Pausing for 1 hour at:") 
+    #    print(as.Character(Sys.time()))
+    #    Sys.sleep(60*60)
+    #  }
         
       geo <- as.list(geocode(loc, output = "latlona", source = "google"))
-    }
+    #}
     if (!is.na(geo$lon) && !is.na(geo$lat)) {
       user_locs_geo_list$lon <- append(user_locs_geo_list$lon, geo$lon)
       user_locs_geo_list$lat <- append(user_locs_geo_list$lat, geo$lat)
