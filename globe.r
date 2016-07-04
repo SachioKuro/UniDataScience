@@ -43,7 +43,7 @@ setup_twitter_oauth(twitter_consumer_key, twitter_consumer_secret, twitter_acces
 
 lookup_chunkSize <- 20
 
-tweets <- suppressWarnings(searchTwitter(search_hash, n = 10000, retryOnRateLimit = 250))
+tweets <- suppressWarnings(searchTwitter(search_hash, n = 30, retryOnRateLimit = 250))
 
 tweets_userNames <- sapply(tweets, function(t) {
   t$screenName
@@ -70,7 +70,14 @@ for(loc in user_locs) {
         if (!is.na(geo$results[[1]]$geometry$location$lng) && !is.na(geo$results[[1]]$geometry$location$lat)) {
           user_locs_geo_list$lon <- append(user_locs_geo_list$lon, geo$results[[1]]$geometry$location$lng)
           user_locs_geo_list$lat <- append(user_locs_geo_list$lat, geo$results[[1]]$geometry$location$lat)
-          user_locs_geo_list$formatted <- append(user_locs_geo_list$formatted, geo$results[[1]]$formatted_address)
+          
+          country <- "NA"
+          for (i in 1:length(geo$results[[1]]$address_components)) {
+            if ("country" %in% geo$results[[1]]$address_components[[i]]$types)
+              country <- geo$results[[1]]$address_components[[i]]$long_name
+          }
+          
+          user_locs_geo_list$country <- append(user_locs_geo_list$country, country)
           user_locs_geo_list$raw <- append(user_locs_geo_list$raw, loc)
         } else {
           blacklist <- append(blacklist, loc)
@@ -89,8 +96,7 @@ for(loc in user_locs) {
 }
 
 countriescount <- list()
-for (country in user_locs_geo_list$formatted) {
-  country <- str_extract(country, "[a-zA-Z][a-zA-Z ]*$")
+for (country in user_locs_geo_list$country) {
   if (country %in% names(countriescount)) {
     countriescount[[country]] <- countriescount[[country]] + 1 
   } else {
