@@ -114,7 +114,7 @@ for (i in names(countedSumSorted_df)) {
         space = F, 
         ylim = c(0, countedSumSorted_df[[i]][['count']][[1]] + 1000),
         main = i)
-    text(x = plot, y = head(countedSumSorted_df[[i]][['count']] + 225, n = 100), 
+    text(x = plot, y = head(countedSumSorted_df[[i]][['count']] + 350, n = 100), 
          label = head(countedSumSorted_df[[i]][['count']], n = 100), 
          pos = NULL, cex = 0.75, col = "grey", srt = 90)
     dev.off()

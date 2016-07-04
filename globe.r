@@ -97,12 +97,11 @@ for (country in user_locs_geo_list$formatted) {
 }
 write.table(countriescount, file = paste0("TBL/", as.character(length(user_locs_geo_list[[1]])),search_hash,"-countrycount.tbl"))
 
+cairo_pdf(paste0("PDF2/", as.character(length(user_locs_geo_list[[1]])),search_hash,".pdf"), width = 20, height = 10)
 plot <- ggplot(as.data.frame(user_locs_geo_list), aes(lon, lat))
 plot <- plot + theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank())
 plot <- plot + geom_point(color = "red", alpha = 0.05, stroke = 0, size = 5)
 plot <- plot + borders(colour = "black", size = 0.15)
-cairo_pdf(paste0("PDF/", as.character(length(user_locs_geo_list[[1]])),search_hash,".pdf"), width = 20, height = 10)
-plot
 dev.off()
 
 geocodeQueryCheck(userType = "free")
