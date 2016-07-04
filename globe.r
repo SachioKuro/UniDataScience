@@ -43,7 +43,7 @@ setup_twitter_oauth(twitter_consumer_key, twitter_consumer_secret, twitter_acces
 
 lookup_chunkSize <- 20
 
-tweets <- suppressWarnings(searchTwitter(search_hash, n = 30, retryOnRateLimit = 250))
+tweets <- suppressWarnings(searchTwitter(search_hash, n = 10000, retryOnRateLimit = 250))
 
 tweets_userNames <- sapply(tweets, function(t) {
   t$screenName
@@ -59,30 +59,32 @@ names(user_locs) <- md5(names(user_locs))
 for(loc in user_locs) {
   if (!(loc %in% user_locs_geo_list$raw) && !(loc %in% blacklist)) {
     geo <- geocode(loc, output = "all", source = "google")
-    while (geo$status == "OVER_QUERY_LIMIT") {
-      print("OVER QUERY LIMIT") 
-      print(as.character(Sys.time()))
-      Sys.sleep(60*60)
-      geo <- geocode(loc, output = "all", source = "google")
-    }
-    if (length(geo$results) == 1) {
-      if (!is.na(geo$results[[1]]$geometry$location$lng) && !is.na(geo$results[[1]]$geometry$location$lat)) {
-        user_locs_geo_list$lon <- append(user_locs_geo_list$lon, geo$results[[1]]$geometry$location$lng)
-        user_locs_geo_list$lat <- append(user_locs_geo_list$lat, geo$results[[1]]$geometry$location$lat)
-        user_locs_geo_list$formatted <- append(user_locs_geo_list$formatted, geo$results[[1]]$formatted_address)
-        user_locs_geo_list$raw <- append(user_locs_geo_list$raw, loc)
+    if (!is.na(geo)) {
+      while (geo$status == "OVER_QUERY_LIMIT") {
+        print("OVER QUERY LIMIT") 
+        print(as.character(Sys.time()))
+        Sys.sleep(60*60)
+        geo <- geocode(loc, output = "all", source = "google")
+      }
+      if (length(geo$results) == 1) {
+        if (!is.na(geo$results[[1]]$geometry$location$lng) && !is.na(geo$results[[1]]$geometry$location$lat)) {
+          user_locs_geo_list$lon <- append(user_locs_geo_list$lon, geo$results[[1]]$geometry$location$lng)
+          user_locs_geo_list$lat <- append(user_locs_geo_list$lat, geo$results[[1]]$geometry$location$lat)
+          user_locs_geo_list$formatted <- append(user_locs_geo_list$formatted, geo$results[[1]]$formatted_address)
+          user_locs_geo_list$raw <- append(user_locs_geo_list$raw, loc)
+        } else {
+          blacklist <- append(blacklist, loc)
+        }
       } else {
         blacklist <- append(blacklist, loc)
       }
-    } else {
-      blacklist <- append(blacklist, loc)
     }
   } else if(!(loc %in% blacklist)) {
     geoindex <- which(user_locs_geo_list$raw == loc)
-    user_locs_geo_list[[1]] <- append(user_locs_geo_list[[1]], user_locs_geo_list[[1]][[geoindex]])
-    user_locs_geo_list[[2]] <- append(user_locs_geo_list[[2]], user_locs_geo_list[[2]][[geoindex]])
-    user_locs_geo_list[[3]] <- append(user_locs_geo_list[[3]], user_locs_geo_list[[3]][[geoindex]])
-    user_locs_geo_list[[4]] <- append(user_locs_geo_list[[4]], user_locs_geo_list[[4]][[geoindex]])
+    user_locs_geo_list[[1]] <- append(user_locs_geo_list[[1]], user_locs_geo_list[[1]][[geoindex[[1]]]])
+    user_locs_geo_list[[2]] <- append(user_locs_geo_list[[2]], user_locs_geo_list[[2]][[geoindex[[1]]]])
+    user_locs_geo_list[[3]] <- append(user_locs_geo_list[[3]], user_locs_geo_list[[3]][[geoindex[[1]]]])
+    user_locs_geo_list[[4]] <- append(user_locs_geo_list[[4]], user_locs_geo_list[[4]][[geoindex[[1]]]])
   }
 }
 
