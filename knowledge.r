@@ -29,8 +29,7 @@ buzzWords <- list(c("#Pop"),
                   c("#HipHop", "#Hip Hop", "#Rap"), 
                   c("#Rock", "#Metal"),
                   c("#EDM", "#Techno", "#Hardstyle", "#Dubstep"),
-                  c("#Punk"),
-                  c("#R&B"))
+                  c("#Punk"))
 
 date <- as.Date("2016-06-16")
 time <- Sys.time()
@@ -105,7 +104,7 @@ countedSumSorted_df <- lapply(countedSumSorted, function(x) {data.frame(count = 
 
 pdf.options(encoding = 'UTF-8')
 for (i in names(countedSumSorted_df)) {
-  cairo_pdf(paste0(i, format(time, "%m%d_%H%M"),"_hashtag_plots.pdf"), width = 20, height = 10)
+  png(paste0("PNG/", i, format(time, "%m%d_%H%M"),"_hashtag_plots.png"), width = 1024, height = 1024)
   par(mar = c(16,4,2,4) + 0.1)
   
     plot <- barplot(
@@ -122,4 +121,4 @@ for (i in names(countedSumSorted_df)) {
 }
 
 rm(list=c("buzzWords", "countedSum", "countedSumSorted", "countHashs", "date", "i", "j", "k", "relatedHashs", "relatedHashsFlatten", "tmp"))
-save.image(file = paste0(format(time, "%m%d_%H%M"), ".RData"))
+save.image(file = paste0("Env/", format(time, "%m%d_%H%M"), ".RData"))
