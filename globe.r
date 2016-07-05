@@ -43,7 +43,7 @@ setup_twitter_oauth(twitter_consumer_key, twitter_consumer_secret, twitter_acces
 
 lookup_chunkSize <- 20
 
-tweets <- suppressWarnings(searchTwitter(search_hash, n = 30, retryOnRateLimit = 250))
+tweets <- suppressWarnings(searchTwitter(search_hash, n = 10000, retryOnRateLimit = 250))
 
 tweets_userNames <- sapply(tweets, function(t) {
   t$screenName
@@ -59,7 +59,7 @@ names(user_locs) <- md5(names(user_locs))
 for(loc in user_locs) {
   if (!(loc %in% user_locs_geo_list$raw) && !(loc %in% blacklist)) {
     geo <- geocode(loc, output = "all", source = "google")
-    if (!is.na(geo)) {
+    if (length(geo) > 1 || !is.na(geo)) {
       while (geo$status == "OVER_QUERY_LIMIT") {
         print("OVER QUERY LIMIT") 
         print(as.character(Sys.time()))
@@ -110,6 +110,7 @@ plot <- ggplot(as.data.frame(user_locs_geo_list), aes(lon, lat))
 plot <- plot + theme(panel.grid.minor = element_blank(), panel.grid.major = element_blank(), panel.background = element_blank())
 plot <- plot + geom_point(color = "red", alpha = 0.05, stroke = 0, size = 5)
 plot <- plot + borders(colour = "black", size = 0.15)
+print(plot)
 dev.off()
 
 geocodeQueryCheck(userType = "free")
