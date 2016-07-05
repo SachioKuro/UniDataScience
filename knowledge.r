@@ -104,7 +104,7 @@ countedSumSorted_df <- lapply(countedSumSorted, function(x) {data.frame(count = 
 
 pdf.options(encoding = 'UTF-8')
 for (i in names(countedSumSorted_df)) {
-  CairoPDF(paste0("PDF/", i, format(time, "%m%d_%H%M"),"_hashtag_plots_new.pdf"), width = 20, height = 10, family = names(pdfFonts())[25])
+  CairoPDF(paste0("PDF/", i, format(time, "%m%d_%H%M"),"_hashtag_plots_new.pdf"), width = 20, height = 10)
   par(mar = c(16,4,2,4) + 0.1)
   
     plot <- barplot(
