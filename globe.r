@@ -58,7 +58,7 @@ names(user_locs) <- md5(names(user_locs))
 
 for(loc in user_locs) {
   if (!(loc %in% user_locs_geo_list$raw) && !(loc %in% blacklist)) {
-    geo <- geocode(loc, output = "all", source = "google")
+    geo <- geocode(loc, output = "all", messaging = T, override_limit = T, source = "google")
     if (length(geo) > 1 || !is.na(geo)) {
       while (geo$status == "OVER_QUERY_LIMIT") {
         print("OVER QUERY LIMIT") 
