@@ -1,8 +1,8 @@
 #need Arg 1 = search_hash (string)
-search_hash <- "#Uni"
+#search_hash <- "#Uni"
 #need following structures
-user_locs_geo_list <- list()
-blacklist <- list()
+#user_locs_geo_list <- list()
+#blacklist <- list()
 
 if (!require("twitteR")) {
   install.packages("twitteR")
@@ -43,7 +43,7 @@ setup_twitter_oauth(twitter_consumer_key, twitter_consumer_secret, twitter_acces
 
 lookup_chunkSize <- 20
 
-tweets <- suppressWarnings(searchTwitter(search_hash, n = 10, retryOnRateLimit = 250))
+tweets <- suppressWarnings(searchTwitter(search_hash, n = 10000, retryOnRateLimit = 250))
 
 first_tweet <- tweets[[length(tweets)]]$created
 last_tweet <- tweets[[1]]$created
